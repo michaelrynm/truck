@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(if [ -d \"node_modules\" ])",
+      "Bash(then echo \"Backend: node_modules exists\")",
+      "Bash(else echo \"Backend: node_modules NOT found - need to run npm install\")",
+      "Bash(fi)",
+      "Bash(then echo \"Frontend: node_modules exists\")",
+      "Bash(else echo \"Frontend: node_modules NOT found - need to run npm install\")",
+      "Bash(if [ -f \".env\" ])",
+      "Bash(then echo \".env exists\")",
+      "Bash(else echo \".env NOT found\")",
+      "Bash(npm run dev:*)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(taskkill //F //PID 30112)",
+      "Bash(cat:*)",
+      "Bash(npm run prisma:migrate:*)",
+      "Bash(tree:*)"
+    ]
+  }
+}

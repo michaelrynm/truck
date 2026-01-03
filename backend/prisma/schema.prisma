@@ -1,0 +1,152 @@
+// Prisma schema for Dump Truck Management System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  DRIVER
+}
+
+enum DriverStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum TruckStatus {
+  READY
+  OPERATING
+  MAINTENANCE
+}
+
+enum ContractStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum ScheduleStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  driver    Driver?
+
+  @@map("users")
+}
+
+model Driver {
+  id            String       @id @default(uuid())
+  name          String
+  licenseNumber String       @unique
+  phone         String
+  address       String?
+  status        DriverStatus @default(ACTIVE)
+  userId        String?      @unique
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  user          User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  schedules     Schedule[]
+  activityLogs  ActivityLog[]
+
+  @@map("drivers")
+}
+
+model DumpTruck {
+  id           String        @id @default(uuid())
+  plateNumber  String        @unique
+  brand        String
+  model        String
+  year         Int
+  type         String
+  capacity     Int
+  status       TruckStatus   @default(READY)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  schedules    Schedule[]
+  activityLogs ActivityLog[]
+
+  @@map("dump_trucks")
+}
+
+model Contract {
+  id                         String         @id @default(uuid())
+  clientName                 String
+  location                   String
+  startDate                  DateTime
+  endDate                    DateTime
+  numberOfTrucks             Int
+  price                      Decimal        @db.Decimal(10, 2)
+  physicalActivityPercentage Float?
+  status                     ContractStatus @default(ACTIVE)
+  description                String?        @db.Text
+  createdAt                  DateTime       @default(now())
+  updatedAt                  DateTime       @updatedAt
+
+  schedules      Schedule[]
+
+  @@map("contracts")
+}
+
+model Schedule {
+  id          String         @id @default(uuid())
+  contractId  String
+  dumpTruckId String
+  driverId    String
+  date        DateTime
+  startTime   String
+  endTime     String
+  status      ScheduleStatus @default(SCHEDULED)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  contract    Contract       @relation(fields: [contractId], references: [id], onDelete: Cascade)
+  dumpTruck   DumpTruck      @relation(fields: [dumpTruckId], references: [id], onDelete: Restrict)
+  driver      Driver         @relation(fields: [driverId], references: [id], onDelete: Restrict)
+  activityLogs ActivityLog[]
+
+  @@map("schedules")
+}
+
+model ActivityLog {
+  id            String    @id @default(uuid())
+  scheduleId    String?
+  driverId      String
+  dumpTruckId   String?
+  date          DateTime
+  startTime     String
+  endTime       String?
+  numberOfLoads Int
+  location      String
+  workingHours  Float?
+  notes         String?   @db.Text
+  submittedAt   DateTime  @default(now())
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  schedule      Schedule?  @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  driver        Driver     @relation(fields: [driverId], references: [id], onDelete: Restrict)
+  dumpTruck     DumpTruck? @relation(fields: [dumpTruckId], references: [id], onDelete: Restrict)
+
+  @@map("activity_logs")
+}
