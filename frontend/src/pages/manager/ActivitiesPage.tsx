@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 import { activitiesApi } from "@/api/activities.api";
 import { ActivityLog } from "@/types";
-import { formatDate, formatDateTime } from "@/utils/formatters";
+import { formatDate } from "@/utils/formatters";
 import Card from "@/components/common/Card";
 import Table from "@/components/common/Table";
 import LoadingSpinner from "@/components/common/LoadingSpinner";

@@ -8,9 +8,9 @@ const ProfilePage = () => {
   const { user } = useAuth();
 
   const { data: driver, isLoading } = useQuery({
-    queryKey: ['driver-profile', user?.driverId],
-    queryFn: () => driversApi.getById(user?.driverId || ''),
-    enabled: !!user?.driverId,
+    queryKey: ['driver-profile', user?.driver?.id],
+    queryFn: () => driversApi.getById(user?.driver?.id || ''),
+    enabled: !!user?.driver?.id,
   });
 
   if (isLoading) return <LoadingSpinner />;
@@ -49,7 +49,7 @@ const ProfilePage = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                 <span className={`inline-flex items-center px-3 py-1 rounded-lg text-sm font-medium border ${
-                  driver.status === 'AVAILABLE'
+                  driver.status === 'ACTIVE'
                     ? 'bg-green-50 text-green-700 border-green-200'
                     : 'bg-gray-50 text-gray-700 border-gray-200'
                 }`}>
