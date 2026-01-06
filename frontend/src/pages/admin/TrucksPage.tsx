@@ -119,7 +119,7 @@ const TrucksPage = () => {
     {
       header: 'Actions',
       accessor: (row: DumpTruck) => (
-        <div className="flex space-x-2">
+        <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
           <Button size="sm" variant="secondary" onClick={() => handleEdit(row)}>
             Edit
           </Button>
