@@ -10,22 +10,22 @@ import { Users, Truck, FileText, UserCheck } from 'lucide-react';
 const AdminDashboard = () => {
   const { data: users, isLoading: usersLoading } = useQuery({
     queryKey: ['users'],
-    queryFn: () => usersApi.getAll(),
+    queryFn: () => usersApi.getAll({ limit: 9999 }),
   });
 
   const { data: drivers, isLoading: driversLoading } = useQuery({
     queryKey: ['drivers'],
-    queryFn: () => driversApi.getAll(),
+    queryFn: () => driversApi.getAll({ limit: 9999 }),
   });
 
   const { data: trucks, isLoading: trucksLoading } = useQuery({
     queryKey: ['trucks'],
-    queryFn: () => dumpTrucksApi.getAll(),
+    queryFn: () => dumpTrucksApi.getAll({ limit: 9999 }),
   });
 
   const { data: contracts, isLoading: contractsLoading } = useQuery({
     queryKey: ['contracts'],
-    queryFn: () => contractsApi.getAll(),
+    queryFn: () => contractsApi.getAll(undefined, { limit: 9999 }),
   });
 
   if (usersLoading || driversLoading || trucksLoading || contractsLoading) {
@@ -47,7 +47,7 @@ const AdminDashboard = () => {
     },
     {
       title: 'Total Trucks',
-      value: trucks?.data?.length || 0,
+      value: trucks?.pagination?.total || 0,
       icon: Truck,
       color: 'orange',
     },

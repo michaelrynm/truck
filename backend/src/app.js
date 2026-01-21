@@ -15,9 +15,10 @@ app.use(helmet());
 const corsOrigin = process.env.CORS_ORIGIN || 'http://localhost:3000';
 app.use(
   cors({
-    origin: process.env.NODE_ENV === 'production'
-      ? corsOrigin.split(',').map(o => o.trim())
-      : true,
+    // origin: process.env.NODE_ENV === 'production'
+    //   ? corsOrigin.split(',').map(o => o.trim())
+    //   : true,
+    origin: true,
     credentials: true,
   })
 );
