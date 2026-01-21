@@ -235,7 +235,7 @@ const ContractsPage = () => {
             />
 
             <Input
-              label="Phisical Activity %"
+              label="Phisical Availability %"
               type="number"
               step="0.01"
               {...register("physicalActivityPercentage", { valueAsNumber: true })}
